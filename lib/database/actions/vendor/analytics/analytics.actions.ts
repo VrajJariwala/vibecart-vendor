@@ -68,26 +68,26 @@ export const sizeAnalytics = async () => {
 };
 
 // get top selling products for vendor
-// export const getTopSellingProducts = async () => {
-//   try {
-//     await connectToDatabase();
-//     const nextCookies = await cookies();
-//     const vendor_token = nextCookies.get("vendor_token");
-//     const decode = jwt.verify(vendor_token?.value, process.env.JWT_SECRET);
-//     const { ObjectId } = mongoose.Types;
-//     const vendorObjectId = new ObjectId(decode.id);
-//     let topSellingProducts = await Product.find({
-//       "vendor._id": vendorObjectId,
-//     })
-//       .sort({ "subProducts.sold": -1 })
-//       .limit(5)
-//       .lean();
-//     const pieChartData = topSellingProducts.map((product) => ({
-//       name: product.name,
-//       value: product.subProducts[0].sold,
-//     }));
-//     return JSON.parse(JSON.stringify(pieChartData));
-//   } catch (error: any) {
-//     console.log(error);
-//   }
-// };
+export const getTopSellingProducts = async () => {
+  try {
+    await connectToDatabase();
+    const nextCookies = await cookies();
+    const vendor_token = nextCookies.get("vendor_token");
+    const decode = jwt.verify(vendor_token?.value, process.env.JWT_SECRET);
+    const { ObjectId } = mongoose.Types;
+    const vendorObjectId = new ObjectId(decode.id);
+    let topSellingProducts = await Product.find({
+      "vendor._id": vendorObjectId,
+    })
+      .sort({ "subProducts.sold": -1 })
+      .limit(5)
+      .lean();
+    const pieChartData = topSellingProducts.map((product) => ({
+      name: product.name,
+      value: product.subProducts[0].sold,
+    }));
+    return JSON.parse(JSON.stringify(pieChartData));
+  } catch (error: any) {
+    console.log(error);
+  }
+};
